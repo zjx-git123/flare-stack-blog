@@ -48,10 +48,10 @@ let highlighterPromise: Promise<HighlighterCore> | null = null;
 export async function getHighlighter() {
   if (!highlighterPromise) {
     // Customizing the background color of vitesse-dark to remove the greenish tint
-    // using Zinc-900 (#18181b) to match the dark mode UI
+    // using a warm dark sepia (#1a1410) to match the retro dark mode UI
     const customViteDark = {
       ...viteDark,
-      bg: "#18181b",
+      bg: "#1a1410",
       name: "vitesse-dark", // Ensure name matches
     };
 
