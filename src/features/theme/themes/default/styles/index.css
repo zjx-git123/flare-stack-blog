@@ -131,6 +131,12 @@ mark {
 }
 
 @layer base {
+  /* Always reserve the vertical scrollbar gutter so page content does not
+     shift horizontally when navigating between pages of different heights. */
+  html {
+    overflow-y: scroll;
+  }
+
   body {
     @apply bg-background text-foreground overflow-x-hidden font-sans antialiased;
     transition:
