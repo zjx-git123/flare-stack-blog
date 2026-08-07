@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import type { FriendLinksPageProps } from "@/features/theme/contract/pages";
+import { Reveal } from "@/features/theme/themes/default/components/reveal";
 import { m } from "@/paraglide/messages";
 import { FriendLinkCard } from "./friend-link-card";
 
@@ -9,12 +10,16 @@ export function FriendLinksPage({ links }: FriendLinksPageProps) {
     <div className="w-full max-w-3xl mx-auto pb-20 px-6 md:px-0">
       {/* Header */}
       <header className="py-12 md:py-20 space-y-6">
-        <h1 className="text-4xl md:text-5xl font-serif font-medium tracking-tight text-foreground">
-          {m.friend_links_title()}
-        </h1>
-        <p className="max-w-xl text-base md:text-lg font-light text-muted-foreground leading-relaxed">
-          {m.friend_links_desc()}
-        </p>
+        <Reveal>
+          <h1 className="text-4xl md:text-5xl font-serif font-medium tracking-tight text-foreground">
+            {m.friend_links_title()}
+          </h1>
+        </Reveal>
+        <Reveal delay={100}>
+          <p className="max-w-xl text-base md:text-lg font-light text-muted-foreground leading-relaxed">
+            {m.friend_links_desc()}
+          </p>
+        </Reveal>
       </header>
 
       {/* Links List */}
@@ -30,35 +35,39 @@ export function FriendLinksPage({ links }: FriendLinksPageProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {links.map((link) => (
-              <FriendLinkCard key={link.id} link={link} />
+            {links.map((link, i) => (
+              <Reveal key={link.id} delay={Math.min(i * 60, 240)}>
+                <FriendLinkCard link={link} />
+              </Reveal>
             ))}
           </div>
         )}
       </div>
 
       {/* Submit CTA */}
-      <div className="mt-20 pt-10 border-t border-border/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="space-y-1">
-          <h3 className="text-sm font-medium text-foreground">
-            {m.friend_links_join_title()}
-          </h3>
-          <p className="text-sm text-muted-foreground font-light">
-            {m.friend_links_join_desc()}
-          </p>
-        </div>
+      <Reveal>
+        <div className="mt-20 pt-10 border-t border-border/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <h3 className="text-sm font-medium text-foreground">
+              {m.friend_links_join_title()}
+            </h3>
+            <p className="text-sm text-muted-foreground font-light">
+              {m.friend_links_join_desc()}
+            </p>
+          </div>
 
-        <Link
-          to="/submit-friend-link"
-          className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
-        >
-          <span>{m.friend_links_apply()}</span>
-          <ArrowUpRight
-            size={14}
-            className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform"
-          />
-        </Link>
-      </div>
+          <Link
+            to="/submit-friend-link"
+            className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
+          >
+            <span>{m.friend_links_apply()}</span>
+            <ArrowUpRight
+              size={14}
+              className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform"
+            />
+          </Link>
+        </div>
+      </Reveal>
     </div>
   );
 }

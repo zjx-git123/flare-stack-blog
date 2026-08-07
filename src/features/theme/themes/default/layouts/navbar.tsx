@@ -41,7 +41,10 @@ export function Navbar({
       >
         <div className="max-w-3xl mx-auto w-full px-6 md:px-0 flex items-center justify-between">
           {/* Left: Brand */}
-          <Link to="/" className="group select-none">
+          <Link
+            to="/"
+            className="group select-none transition-transform duration-300 hover:-translate-y-px"
+          >
             <span className="font-serif text-xl font-bold tracking-tighter text-foreground transition-colors group-hover:text-muted-foreground">
               [ {siteConfig.theme.default.navBarName} ]
             </span>
@@ -53,9 +56,9 @@ export function Navbar({
               <Link
                 key={option.id}
                 to={option.to}
-                className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground/60 hover:text-foreground transition-colors"
+                className="relative text-[11px] font-medium uppercase tracking-widest text-muted-foreground/60 hover:text-foreground transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
                 activeProps={{
-                  className: "!text-foreground",
+                  className: "!text-foreground after:scale-x-100",
                 }}
               >
                 {option.label}

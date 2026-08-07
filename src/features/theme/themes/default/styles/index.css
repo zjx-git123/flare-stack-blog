@@ -330,3 +330,84 @@ mark {
   @apply relative scroll-mt-25;
   animation: highlight-flash 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
+
+/* ==========================================================================
+   Scroll-Reveal Entrance Animations
+   Elements are only hidden once JS is confirmed (html.js) so content stays
+   visible for SSR, no-JS, and prefers-reduced-motion users.
+   ========================================================================== */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-from-y, 16px));
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Terminal-style blinking block cursor */
+.terminal-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 0.15em;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  animation: terminal-blink 1.1s step-end infinite;
+}
+
+@keyframes terminal-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Waving-hand entrance (home hero) */
+@keyframes wave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30% {
+    transform: rotate(14deg);
+  }
+  20%,
+  40% {
+    transform: rotate(-6deg);
+  }
+}
+
+.animate-wave {
+  animation: wave 2.4s ease-in-out infinite;
+}
+
+/* Respect reduced motion: disable reveal / cursor / wave animations */
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .terminal-cursor {
+    animation: none;
+    opacity: 0;
+  }
+
+  .animate-wave {
+    animation: none;
+  }
+}

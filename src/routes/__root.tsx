@@ -3,6 +3,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   HeadContent,
+  ScriptOnce,
   Scripts,
   useRouteContext,
 } from "@tanstack/react-router";
@@ -125,6 +126,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <ScriptOnce>
+          {`document.documentElement.classList.add("js")`}
+        </ScriptOnce>
         <ThemeProvider>{children}</ThemeProvider>
         <TanStackDevtools
           config={{

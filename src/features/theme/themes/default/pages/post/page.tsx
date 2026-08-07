@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import type { PostPageProps } from "@/features/theme/contract/pages";
 import { ContentRenderer } from "@/features/theme/themes/default/components/content/content-renderer";
+import { Reveal } from "@/features/theme/themes/default/components/reveal";
 import { authClient } from "@/lib/auth/auth.client";
 import { formatDate } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
@@ -51,121 +52,131 @@ export function PostPage({ post }: PostPageProps) {
       <article className="space-y-16">
         {/* Header Section */}
         <header className="space-y-8">
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-muted-foreground/60 tracking-wider">
-              <span className="flex items-center gap-1.5">
-                {m.post_published_at()}:{" "}
-                <ClientOnly fallback={<span>-</span>}>
-                  {formatDate(post.publishedAt)}
-                </ClientOnly>
-              </span>
-              <span className="opacity-30">/</span>
-              <span className="flex items-center gap-1.5">
-                {m.post_last_updated()}:{" "}
-                <ClientOnly fallback={<span>-</span>}>
-                  {formatDate(post.updatedAt)}
-                </ClientOnly>
-              </span>
-              <span className="opacity-30">/</span>
-              <span>{m.read_time({ count: post.readTimeInMinutes })}</span>
+          <Reveal>
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-muted-foreground/60 tracking-wider">
+                <span className="flex items-center gap-1.5">
+                  {m.post_published_at()}:{" "}
+                  <ClientOnly fallback={<span>-</span>}>
+                    {formatDate(post.publishedAt)}
+                  </ClientOnly>
+                </span>
+                <span className="opacity-30">/</span>
+                <span className="flex items-center gap-1.5">
+                  {m.post_last_updated()}:{" "}
+                  <ClientOnly fallback={<span>-</span>}>
+                    {formatDate(post.updatedAt)}
+                  </ClientOnly>
+                </span>
+                <span className="opacity-30">/</span>
+                <span>{m.read_time({ count: post.readTimeInMinutes })}</span>
 
-              {/* Tags */}
-              {post.tags && post.tags.length > 0 && (
-                <>
-                  <span className="opacity-30">/</span>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {post.tags.map((tag) => (
-                      <Link
-                        key={tag.id}
-                        to="/posts"
-                        search={{ tagName: tag.name }}
-                        className="hover:text-foreground transition-colors"
-                      >
-                        #{tag.name}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              )}
+                {/* Tags */}
+                {post.tags && post.tags.length > 0 && (
+                  <>
+                    <span className="opacity-30">/</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {post.tags.map((tag) => (
+                        <Link
+                          key={tag.id}
+                          to="/posts"
+                          search={{ tagName: tag.name }}
+                          className="hover:text-foreground transition-colors"
+                        >
+                          #{tag.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <h1
+                className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium leading-[1.1] tracking-tight text-foreground"
+                style={{ viewTransitionName: `post-title-${post.slug}` }}
+              >
+                {post.title}
+              </h1>
             </div>
-
-            <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium leading-[1.1] tracking-tight text-foreground"
-              style={{ viewTransitionName: `post-title-${post.slug}` }}
-            >
-              {post.title}
-            </h1>
-          </div>
+          </Reveal>
 
           {post.summary && (
-            <div className="bg-muted/30 rounded-lg p-6 space-y-3 border border-border/40">
-              <div className="flex items-center gap-2 text-muted-foreground/80 font-medium text-sm uppercase tracking-widest">
-                <Sparkles className="w-4 h-4" />
-                <span>{m.post_summary_title()}</span>
+            <Reveal delay={120}>
+              <div className="bg-muted/30 rounded-lg p-6 space-y-3 border border-border/40">
+                <div className="flex items-center gap-2 text-muted-foreground/80 font-medium text-sm uppercase tracking-widest">
+                  <Sparkles className="w-4 h-4" />
+                  <span>{m.post_summary_title()}</span>
+                </div>
+                <p className="text-lg leading-relaxed text-muted-foreground font-serif">
+                  {post.summary}
+                </p>
               </div>
-              <p className="text-lg leading-relaxed text-muted-foreground font-serif">
-                {post.summary}
-              </p>
-            </div>
+            </Reveal>
           )}
         </header>
 
         {/* Content Layout */}
-        <div className="relative">
-          {/* Floating TOC for Large Screens */}
-          <aside className="hidden xl:block absolute left-full ml-12 top-0 h-full">
-            <div className="sticky top-32 w-60">
-              <TableOfContents headers={post.toc} />
-            </div>
-          </aside>
-
-          <main className="max-w-none text-foreground leading-relaxed font-serif">
-            <ContentRenderer content={post.contentJson} />
-
-            <footer className="mt-24 pt-8 border-t border-border/20 flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground/60 tracking-widest uppercase">
-                <span>{m.post_end_notice()}</span>
+        <Reveal delay={180}>
+          <div className="relative">
+            {/* Floating TOC for Large Screens */}
+            <aside className="hidden xl:block absolute left-full ml-12 top-0 h-full">
+              <div className="sticky top-32 w-60">
+                <TableOfContents headers={post.toc} />
               </div>
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  navigator.clipboard
-                    .writeText(window.location.href)
-                    .then(() => {
-                      toast.success(m.post_share_success(), {
-                        description: m.post_share_success_desc(),
+            </aside>
+
+            <main className="max-w-none text-foreground leading-relaxed font-serif">
+              <ContentRenderer content={post.contentJson} />
+
+              <footer className="mt-24 pt-8 border-t border-border/20 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground/60 tracking-widest uppercase">
+                  <span>{m.post_end_notice()}</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    navigator.clipboard
+                      .writeText(window.location.href)
+                      .then(() => {
+                        toast.success(m.post_share_success(), {
+                          description: m.post_share_success_desc(),
+                        });
+                      })
+                      .catch(() => {
+                        toast.error(m.post_share_error(), {
+                          description: m.post_share_error_desc(),
+                        });
                       });
-                    })
-                    .catch(() => {
-                      toast.error(m.post_share_error(), {
-                        description: m.post_share_error_desc(),
-                      });
-                    });
-                }}
-                className="group h-auto p-0 flex items-center gap-3 text-xs uppercase tracking-widest font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent hover:bg-transparent"
-              >
-                <span>{m.post_share()}</span>
-                <Share2
-                  size={12}
-                  strokeWidth={1.5}
-                  className="group-hover:-translate-y-0.5 transition-transform"
-                />
-              </Button>
-            </footer>
-          </main>
-        </div>
+                  }}
+                  className="group h-auto p-0 flex items-center gap-3 text-xs uppercase tracking-widest font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent hover:bg-transparent"
+                >
+                  <span>{m.post_share()}</span>
+                  <Share2
+                    size={12}
+                    strokeWidth={1.5}
+                    className="group-hover:-translate-y-0.5 transition-transform"
+                  />
+                </Button>
+              </footer>
+            </main>
+          </div>
+        </Reveal>
 
         {/* Related Posts */}
-        <div className="pt-24 border-t border-border/40">
-          <Suspense fallback={<RelatedPostsSkeleton />}>
-            <RelatedPosts slug={post.slug} />
-          </Suspense>
-        </div>
+        <Reveal>
+          <div className="pt-24 border-t border-border/40">
+            <Suspense fallback={<RelatedPostsSkeleton />}>
+              <RelatedPosts slug={post.slug} />
+            </Suspense>
+          </div>
+        </Reveal>
 
         {/* Comments Section */}
-        <div className="pt-12 border-t-0 border-border/40">
-          <CommentSection postId={post.id} />
-        </div>
+        <Reveal>
+          <div className="pt-12 border-t-0 border-border/40">
+            <CommentSection postId={post.id} />
+          </div>
+        </Reveal>
       </article>
 
       {/* Back To Top */}

@@ -37,7 +37,7 @@ export function Footer({ navOptions }: FooterProps) {
             <Link
               key={option.id}
               to={option.to}
-              className="hover:text-foreground transition-colors"
+              className="relative hover:text-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
             >
               {option.label}
             </Link>
@@ -56,7 +56,7 @@ export function Footer({ navOptions }: FooterProps) {
                   href={href}
                   target={link.platform === "email" ? undefined : "_blank"}
                   rel={link.platform === "email" ? undefined : "noreferrer"}
-                  className="hover:text-foreground transition-colors"
+                  className="relative hover:text-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
                 >
                   {label}
                 </a>
