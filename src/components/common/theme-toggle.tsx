@@ -11,6 +11,7 @@ const themes: Array<UserTheme> = ["light", "dark", "system"];
 export function ThemeToggle({ className }: { className?: string }) {
   const { userTheme, setTheme } = useTheme();
   const ref = React.useRef<HTMLButtonElement>(null);
+  const transitionIdRef = React.useRef(0);
   const themeLabel =
     userTheme === "light"
       ? m.theme_light()
@@ -40,7 +41,8 @@ export function ThemeToggle({ className }: { className?: string }) {
     const bottom = window.innerHeight - top;
     const maxRadius = Math.hypot(Math.max(left, right), Math.max(top, bottom));
 
-    document.documentElement.classList.add("theme-transition");
+    const doc = document.documentElement;
+    doc.classList.add("theme-transition");
 
     const transition = document.startViewTransition(() => {
       flushSync(() => {
@@ -48,8 +50,26 @@ export function ThemeToggle({ className }: { className?: string }) {
       });
     });
 
+    // Only the most recent toggle is allowed to clean up the transition class
+    const transitionId = ++transitionIdRef.current;
+
+    const duration = 600;
+    const revealEasing = "cubic-bezier(0.22, 1, 0.36, 1)";
+
     transition.ready.then(() => {
-      document.documentElement.animate(
+      // Old theme dissolves softly while the new one sweeps in
+      doc.animate(
+        { opacity: [1, 0.3] },
+        {
+          duration: 480,
+          easing: "ease-in",
+          fill: "forwards",
+          pseudoElement: "::view-transition-old(root)",
+        },
+      );
+
+      // New theme expands outward from the toggle button
+      doc.animate(
         {
           clipPath: [
             `circle(0px at ${x}px ${y}px)`,
@@ -57,15 +77,18 @@ export function ThemeToggle({ className }: { className?: string }) {
           ],
         },
         {
-          duration: 500,
-          easing: "ease-in-out",
+          duration,
+          easing: revealEasing,
+          fill: "forwards",
           pseudoElement: "::view-transition-new(root)",
         },
       );
     });
 
     transition.finished.finally(() => {
-      document.documentElement.classList.remove("theme-transition");
+      if (transitionIdRef.current === transitionId) {
+        doc.classList.remove("theme-transition");
+      }
     });
   };
 
@@ -82,17 +105,17 @@ export function ThemeToggle({ className }: { className?: string }) {
     >
       <div className="relative flex items-center justify-center w-4 h-4">
         {/* Light Mode Icon */}
-        <span className="hidden [.light:not(.system)_&]:block">
+        <span className="theme-toggle-icon hidden [.light:not(.system)_&]:block">
           <Sun size={14} strokeWidth={1.5} />
         </span>
 
         {/* Dark Mode Icon */}
-        <span className="hidden [.dark:not(.system)_&]:block">
+        <span className="theme-toggle-icon hidden [.dark:not(.system)_&]:block">
           <Moon size={14} strokeWidth={1.5} />
         </span>
 
         {/* System Mode Icon */}
-        <span className="hidden in-[.system]:block">
+        <span className="theme-toggle-icon hidden in-[.system]:block">
           <Monitor size={14} strokeWidth={1.5} />
         </span>
       </div>

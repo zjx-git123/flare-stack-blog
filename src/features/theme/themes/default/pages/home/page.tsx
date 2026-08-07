@@ -42,8 +42,7 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
         <header className="space-y-6">
           <Reveal>
             <h1 className="text-4xl md:text-5xl font-serif font-medium tracking-tight text-foreground flex items-center gap-4">
-              {m.home_greeting()}{" "}
-              <span className="animate-wave origin-[70%_70%]">👋</span>
+              {m.home_greeting()} <span>👋</span>
             </h1>
           </Reveal>
 
@@ -56,7 +55,6 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
                 </span>
                 {m.home_intro_separator()}
                 {siteConfig.description}
-                <span className="terminal-cursor text-foreground" />
               </p>
             </div>
           </Reveal>

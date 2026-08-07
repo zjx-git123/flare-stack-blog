@@ -373,28 +373,7 @@ mark {
   }
 }
 
-/* Waving-hand entrance (home hero) */
-@keyframes wave {
-  0%,
-  60%,
-  100% {
-    transform: rotate(0deg);
-  }
-  10%,
-  30% {
-    transform: rotate(14deg);
-  }
-  20%,
-  40% {
-    transform: rotate(-6deg);
-  }
-}
-
-.animate-wave {
-  animation: wave 2.4s ease-in-out infinite;
-}
-
-/* Respect reduced motion: disable reveal / cursor / wave animations */
+/* Respect reduced motion: disable reveal / cursor / icon animations */
 @media (prefers-reduced-motion: reduce) {
   .js .reveal {
     opacity: 1;
@@ -407,7 +386,23 @@ mark {
     opacity: 0;
   }
 
-  .animate-wave {
+  .theme-toggle-icon {
     animation: none;
+  }
+}
+
+/* Theme toggle icon micro-interaction — the icon pops in when the theme changes */
+.theme-toggle-icon {
+  animation: theme-icon-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes theme-icon-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-45deg) scale(0.6);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
   }
 }
