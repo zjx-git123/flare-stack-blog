@@ -12,6 +12,10 @@ type CustomAuthErrorCode = (typeof CUSTOM_AUTH_ERROR_CODES)[number];
 const COMMON_AUTH_ERROR_CODES = [
   "USER_ALREADY_EXISTS",
   "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL",
+  "USERNAME_IS_ALREADY_TAKEN",
+  "USERNAME_TOO_SHORT",
+  "USERNAME_TOO_LONG",
+  "INVALID_USERNAME",
   "INVALID_PASSWORD",
   "USER_NOT_FOUND",
   "INVALID_TOKEN",
@@ -84,6 +88,12 @@ function getSharedAuthErrorMessage(
     case "USER_ALREADY_EXISTS":
     case "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL":
       return messages.auth_error_user_already_exists();
+    case "USERNAME_IS_ALREADY_TAKEN":
+      return messages.auth_error_username_taken();
+    case "USERNAME_TOO_SHORT":
+    case "USERNAME_TOO_LONG":
+    case "INVALID_USERNAME":
+      return messages.auth_error_invalid_username();
     case "INVALID_PASSWORD":
       return messages.auth_error_invalid_password();
     case "USER_NOT_FOUND":
@@ -113,8 +123,7 @@ export function getLoginAuthErrorMessage(
 ): string | undefined {
   const code = getErrorCode(error);
   switch (code) {
-    case "EMAIL_NOT_VERIFIED":
-      return messages.login_error_email_not_verified();
+    case "INVALID_USERNAME_OR_PASSWORD":
     case "INVALID_EMAIL_OR_PASSWORD":
       return messages.login_error_invalid_credentials();
     default:

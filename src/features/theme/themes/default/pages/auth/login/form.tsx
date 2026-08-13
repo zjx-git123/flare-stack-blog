@@ -24,23 +24,25 @@ export function LoginForm({ form, isEmailConfigured }: LoginFormProps) {
       <div className="space-y-6">
         <div className="space-y-2 group">
           <label
-            htmlFor="login-email"
+            htmlFor="login-username"
             className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60 group-focus-within:text-foreground transition-colors"
           >
-            {m.login_email_address()}
+            {m.login_username()}
           </label>
           <Input
-            id="login-email"
-            type="email"
-            {...register("email")}
+            id="login-username"
+            type="text"
+            autoCapitalize="none"
+            autoCorrect="off"
+            {...register("username")}
             className="w-full bg-transparent border-0 border-b border-border/40 rounded-none py-3 text-sm font-light focus-visible:ring-0 focus:border-foreground focus:outline-none transition-all placeholder:text-muted-foreground/30 shadow-none px-0"
-            placeholder={m.login_email_placeholder()}
+            placeholder={m.login_username_placeholder()}
             autoComplete="username"
             disabled={isSubmitting || loginStep !== "IDLE"}
           />
-          {errors.email && (
+          {errors.username && (
             <span className="text-[9px] font-mono text-destructive uppercase tracking-widest mt-1 block">
-              {errors.email.message}
+              {errors.username.message}
             </span>
           )}
         </div>

@@ -33,6 +33,25 @@ export function RegisterForm({ form }: RegisterFormProps) {
 
         <div className="space-y-2 group">
           <label className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60 group-focus-within:text-foreground transition-colors">
+            {m.register_username()}
+          </label>
+          <Input
+            type="text"
+            autoCapitalize="none"
+            autoCorrect="off"
+            {...register("username")}
+            className="w-full bg-transparent border-0 border-b border-border/40 rounded-none py-3 text-sm font-light focus-visible:ring-0 focus:border-foreground focus:outline-none transition-all placeholder:text-muted-foreground/30 shadow-none px-0"
+            placeholder={m.register_username_placeholder()}
+          />
+          {errors.username && (
+            <span className="text-[9px] font-mono text-destructive uppercase tracking-widest mt-1 block">
+              {errors.username.message}
+            </span>
+          )}
+        </div>
+
+        <div className="space-y-2 group">
+          <label className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/60 group-focus-within:text-foreground transition-colors">
             {m.login_email_address()}
           </label>
           <Input

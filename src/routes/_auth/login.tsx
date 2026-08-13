@@ -48,7 +48,6 @@ function RouteComponent() {
 
   const loginForm = useLoginForm({
     turnstileToken,
-    turnstilePending,
     resetTurnstile,
     redirectTo: resolvedRedirectTo,
   });
@@ -57,11 +56,11 @@ function RouteComponent() {
     redirectTo: resolvedRedirectTo,
   });
 
-  const turnstileElement = isEmailConfigured ? (
+  const turnstileElement = (
     <div className="flex justify-center">
       <Turnstile {...turnstileProps} />
     </div>
-  ) : null;
+  );
 
   return (
     <theme.LoginPage

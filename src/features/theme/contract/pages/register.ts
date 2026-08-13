@@ -3,6 +3,7 @@ import type { TurnstileProps } from "@/components/common/turnstile";
 
 export interface RegisterSchema {
   name: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -13,13 +14,11 @@ export interface RegisterFormData {
   errors: FieldErrors<RegisterSchema>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   isSubmitting: boolean;
-  isSuccess: boolean;
   turnstileProps: TurnstileProps;
   turnstilePending: boolean;
 }
 
 export interface RegisterPageProps {
-  isEmailConfigured: boolean;
   registerForm: RegisterFormData;
   turnstileElement: React.ReactNode;
 }

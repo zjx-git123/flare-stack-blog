@@ -5,7 +5,6 @@ import type { LoginPageProps } from "@/features/theme/contract/pages";
 import { m } from "@/paraglide/messages";
 
 export function LoginPage({
-  isEmailConfigured,
   loginForm,
   socialLogin,
   turnstileElement,
@@ -29,39 +28,39 @@ export function LoginPage({
     <div className="flex flex-col gap-8">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold fuwari-text-90">
-          {isEmailConfigured ? m.login_title() : m.login_auth_title()}
-        </h1>
+        <h1 className="text-2xl font-bold fuwari-text-90">{m.login_title()}</h1>
         <p className="text-sm font-medium fuwari-text-50">
-          {isEmailConfigured
-            ? m.login_welcome_back()
-            : m.login_only_third_party_fuwari()}
+          {m.login_welcome_back()}
         </p>
       </div>
 
       <div className="flex flex-col gap-6">
-        {/* Email Login Form */}
-        {isEmailConfigured && (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <div className="flex flex-col gap-1.5 focus-within:text-(--fuwari-primary) transition-colors text-(--fuwari-text-50)">
-              <label htmlFor="login-email" className="text-sm font-bold ml-1">
-                {m.login_email_address()}
-              </label>
-              <input
-                id="login-email"
-                type="email"
-                {...register("email")}
-                placeholder={m.login_email_placeholder()}
-                autoComplete="username"
-                disabled={isFormDisabled}
-                className="w-full bg-(--fuwari-input-bg) border border-(--fuwari-input-border) rounded-xl px-4 py-3 text-(--fuwari-text-90) placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-(--fuwari-primary)/50 focus:bg-(--fuwari-primary)/5 transition-all text-sm outline-none"
-              />
-              {errors.email && (
-                <span className="text-xs text-red-500 ml-1 mt-1 font-medium">
-                  {errors.email.message}
-                </span>
-              )}
-            </div>
+        {/* Username Login Form */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-1.5 focus-within:text-(--fuwari-primary) transition-colors text-(--fuwari-text-50)">
+            <label
+              htmlFor="login-username"
+              className="text-sm font-bold ml-1"
+            >
+              {m.login_username()}
+            </label>
+            <input
+              id="login-username"
+              type="text"
+              autoCapitalize="none"
+              autoCorrect="off"
+              {...register("username")}
+              placeholder={m.login_username_placeholder()}
+              autoComplete="username"
+              disabled={isFormDisabled}
+              className="w-full bg-(--fuwari-input-bg) border border-(--fuwari-input-border) rounded-xl px-4 py-3 text-(--fuwari-text-90) placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-(--fuwari-primary)/50 focus:bg-(--fuwari-primary)/5 transition-all text-sm outline-none"
+            />
+            {errors.username && (
+              <span className="text-xs text-red-500 ml-1 mt-1 font-medium">
+                {errors.username.message}
+              </span>
+            )}
+          </div>
 
             <div className="flex flex-col gap-1.5 focus-within:text-(--fuwari-primary) transition-colors text-(--fuwari-text-50)">
               <div className="flex justify-between items-center ml-1">
@@ -107,27 +106,22 @@ export function LoginPage({
               )}
             </button>
           </form>
-        )}
 
         {/* Divider */}
-        {isEmailConfigured && (
-          <div className="relative flex items-center py-2">
-            <div className="flex-1 border-t border-border/30"></div>
-            <span className="mx-4 text-xs font-medium fuwari-text-30">
-              {m.login_or()}
-            </span>
-            <div className="flex-1 border-t border-border/30"></div>
-          </div>
-        )}
+        <div className="relative flex items-center py-2">
+          <div className="flex-1 border-t border-border/30"></div>
+          <span className="mx-4 text-xs font-medium fuwari-text-30">
+            {m.login_or()}
+          </span>
+          <div className="flex-1 border-t border-border/30"></div>
+        </div>
 
         {/* Social Login */}
         <button
           type="button"
           onClick={handleGithubLogin}
           disabled={isSocialDisabled}
-          className={`group w-full py-3.5 rounded-xl flex gap-3 transition-all font-bold text-sm active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 ${
-            !isEmailConfigured ? "fuwari-btn-primary" : "fuwari-btn-regular"
-          }`}
+          className={`group w-full py-3.5 rounded-xl flex gap-3 transition-all font-bold text-sm active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 fuwari-btn-regular`}
         >
           {socialIsLoading ? (
             <Loader2 size={16} className="animate-spin opacity-70" />
@@ -145,19 +139,17 @@ export function LoginPage({
         {turnstileElement}
 
         {/* Footer Link */}
-        {isEmailConfigured && (
-          <div className="text-center pt-2">
-            <p className="text-sm font-medium fuwari-text-50">
-              {m.login_no_account()}{" "}
-              <Link
-                to="/register"
-                className="text-(--fuwari-primary) hover:underline"
-              >
-                {m.login_register_now()}
-              </Link>
-            </p>
-          </div>
-        )}
+        <div className="text-center pt-2">
+          <p className="text-sm font-medium fuwari-text-50">
+            {m.login_no_account()}{" "}
+            <Link
+              to="/register"
+              className="text-(--fuwari-primary) hover:underline"
+            >
+              {m.login_register_now()}
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -79,7 +79,7 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
     },
     emailAndPassword: {
       enabled: true,
-      requireEmailVerification: true,
+      requireEmailVerification: false,
       password: {
         hash: (password: string) => getPasswordHasher().hash(password),
         verify: (params: { hash: string; password: string }) =>

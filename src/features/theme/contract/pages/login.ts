@@ -2,7 +2,7 @@ import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { TurnstileProps } from "@/components/common/turnstile";
 
 export interface LoginSchema {
-  email: string;
+  username: string;
   password: string;
 }
 

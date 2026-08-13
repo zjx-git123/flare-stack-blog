@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Loader2, MailCheck } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import type { RegisterPageProps } from "@/features/theme/contract/pages";
 import { m } from "@/paraglide/messages";
 
@@ -11,30 +11,6 @@ export function RegisterPage({
     registerForm;
 
   const isFormDisabled = isSubmitting || turnstilePending;
-
-  if (registerForm.isSuccess) {
-    return (
-      <div className="flex flex-col items-center justify-center text-center space-y-8 animate-in fade-in zoom-in-95 duration-500 py-4">
-        <div className="w-16 h-16 rounded-full bg-(--fuwari-primary)/10 text-(--fuwari-primary) flex items-center justify-center mb-2">
-          <MailCheck size={32} strokeWidth={1.5} />
-        </div>
-        <div className="space-y-3">
-          <h3 className="text-2xl font-bold fuwari-text-90 tracking-tight">
-            {m.register_success_title()}
-          </h3>
-          <p className="text-sm font-medium fuwari-text-50 leading-relaxed max-w-xs mx-auto">
-            {m.register_success_desc()}
-          </p>
-        </div>
-        <Link
-          to="/login"
-          className="w-full py-3.5 rounded-xl fuwari-btn-regular font-bold text-sm transition-all active:scale-[0.98] mt-4"
-        >
-          {m.register_back_to_login()}
-        </Link>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -66,6 +42,28 @@ export function RegisterPage({
             {errors.name && (
               <span className="text-xs text-red-500 ml-1 mt-1 font-medium">
                 {errors.name.message}
+              </span>
+            )}
+          </div>
+
+          {/* Username Field */}
+          <div className="flex flex-col gap-1.5 focus-within:text-(--fuwari-primary) transition-colors text-(--fuwari-text-50)">
+            <label htmlFor="reg-username" className="text-sm font-bold ml-1">
+              {m.register_username()}
+            </label>
+            <input
+              id="reg-username"
+              type="text"
+              autoCapitalize="none"
+              autoCorrect="off"
+              {...register("username")}
+              placeholder={m.register_username_placeholder()}
+              disabled={isFormDisabled}
+              className="w-full bg-(--fuwari-input-bg) border border-(--fuwari-input-border) rounded-xl px-4 py-3 text-(--fuwari-text-90) placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-(--fuwari-primary)/50 focus:bg-(--fuwari-primary)/5 transition-all text-sm outline-none"
+            />
+            {errors.username && (
+              <span className="text-xs text-red-500 ml-1 mt-1 font-medium">
+                {errors.username.message}
               </span>
             )}
           </div>

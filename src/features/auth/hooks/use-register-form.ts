@@ -1,7 +1,6 @@
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -19,6 +18,14 @@ const createRegisterSchema = (messages: Messages) =>
         .string()
         .min(2, messages.register_validation_name_min())
         .max(20, messages.register_validation_name_max()),
+      username: z
+        .string()
+        .min(3, messages.register_validation_username_min())
+        .max(30, messages.register_validation_username_max())
+        .regex(
+          /^[a-zA-Z0-9_.]+$/,
+          messages.register_validation_username_invalid(),
+        ),
       email: z.email(messages.register_validation_email_invalid()),
       password: z.string().min(8, messages.register_validation_password_min()),
       confirmPassword: z.string(),
@@ -34,18 +41,11 @@ export interface UseRegisterFormOptions {
   turnstileToken: string | null;
   turnstilePending: boolean;
   resetTurnstile: () => void;
-  isEmailConfigured: boolean;
 }
 
 export function useRegisterForm(options: UseRegisterFormOptions) {
-  const {
-    turnstileToken,
-    turnstilePending,
-    resetTurnstile,
-    isEmailConfigured,
-  } = options;
+  const { turnstileToken, turnstilePending, resetTurnstile } = options;
 
-  const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
   const previousLocation = usePreviousLocation();
   const queryClient = useQueryClient();
@@ -57,10 +57,10 @@ export function useRegisterForm(options: UseRegisterFormOptions) {
 
   const onSubmit = async (data: RegisterSchema) => {
     const { error } = await authClient.signUp.email({
+      username: data.username,
       email: data.email,
       password: data.password,
       name: data.name,
-      callbackURL: `${window.location.origin}/verify-email`,
       fetchOptions: {
         headers: { "X-Turnstile-Token": turnstileToken || "" },
       },
@@ -78,17 +78,10 @@ export function useRegisterForm(options: UseRegisterFormOptions) {
 
     queryClient.removeQueries({ queryKey: AUTH_KEYS.session });
 
-    if (isEmailConfigured) {
-      setIsSuccess(true);
-      toast.success(m.register_toast_created(), {
-        description: m.register_toast_verification_sent(),
-      });
-    } else {
-      toast.success(m.register_toast_success(), {
-        description: m.register_toast_activated(),
-      });
-      navigate({ to: previousLocation });
-    }
+    toast.success(m.register_toast_success(), {
+      description: m.register_toast_activated(),
+    });
+    navigate({ to: previousLocation });
   };
 
   return {
@@ -96,7 +89,6 @@ export function useRegisterForm(options: UseRegisterFormOptions) {
     errors: form.formState.errors,
     handleSubmit: form.handleSubmit(onSubmit),
     isSubmitting: form.formState.isSubmitting,
-    isSuccess,
     turnstilePending,
   };
 }
